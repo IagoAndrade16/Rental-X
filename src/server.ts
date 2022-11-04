@@ -1,5 +1,14 @@
 import express from "express";
+import swaggerUi from "swagger-ui-express";
+
+import { router } from "./routes";
+import swaggerFile from "./swagger.json";
 
 const app = express();
-app.get("/", (req, res) => res.json({ message: "Hello world" }));
+app.use(express.json());
+
+app.use(router);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
 app.listen(3333, () => console.log("Running in port 3333"));
