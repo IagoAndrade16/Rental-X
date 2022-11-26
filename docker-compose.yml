@@ -13,10 +13,6 @@ services:
       - POSTGRES_DB=rentalx
     volumes:
       - pgdata:/data/postgres
-    links:
-      - database_ignite
-    depends_on:
-      - database_ignite
   app: 
     build: .
     container_name: rentalx
@@ -24,6 +20,10 @@ services:
       - 3333:3333
     volumes:
       - .:/usr/app
+    links:
+      - database_ignite
+    depends_on:
+      - database_ignite
     
     
 

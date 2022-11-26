@@ -1,9 +1,11 @@
 import { hash } from "bcryptjs";
 import request from "supertest";
-import { Connection, createConnection } from "typeorm";
+import { Connection } from "typeorm";
 import { v4 as uuidV4 } from "uuid";
 
 import { app } from "@shared/infra/http/app";
+
+import createConnection from "../../../../database";
 
 let connection: Connection;
 
@@ -18,8 +20,6 @@ describe("Create category controller", () => {
       `INSERT INTO USERS(id, name, email, password, "isAdmin", created_at, drive_license)
         values('${id}', 'admin', 'admin@admin.com.br', '${password}', true, 'now()', 'XXXXXX')`
     );
-
-    await connection.close();
   });
 
   afterAll(async () => {
@@ -28,7 +28,7 @@ describe("Create category controller", () => {
   });
 
   it("should be able to list all categories", async () => {
-    const responseToken = await request(app).post("/session").send({
+    const responseToken = await request(app).post("/sessions").send({
       email: "admin@admin.com.br",
       password: "admin",
     });
@@ -50,6 +50,6 @@ describe("Create category controller", () => {
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(1);
     expect(response.body[0]).toHaveProperty("id");
-    expect(response.body[0].name).toEqual("Test Category");
+    expect(response.body[0].name).toEqual("Test category");
   });
 });
