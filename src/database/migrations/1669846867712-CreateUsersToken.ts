@@ -16,6 +16,10 @@ export class CreateUsersToken1669846867712 implements MigrationInterface {
             type: "varchar",
           },
           {
+            name: "user_id",
+            type: "uuid",
+          },
+          {
             name: "expires_date",
             type: "timestamp",
           },
