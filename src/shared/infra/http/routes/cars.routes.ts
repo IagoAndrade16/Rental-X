@@ -24,7 +24,7 @@ carsRoutes.post(
   createCarController.handle
 );
 
-const upload = multer(uploadConfig.upload("./tmp/cars"));
+const upload = multer(uploadConfig);
 
 carsRoutes.get("/available", listAvailableCarsController.handle);
 

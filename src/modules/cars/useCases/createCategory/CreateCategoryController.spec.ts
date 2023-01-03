@@ -7,16 +7,18 @@ import { app } from "@shared/infra/http/app";
 
 let connection: Connection;
 
-describe("Create category controller", () => {
+describe("Create Category Controller", () => {
   beforeAll(async () => {
     connection = await createConnection();
-
     await connection.runMigrations();
+
     const id = uuidV4();
     const password = await hash("admin", 8);
+
     await connection.query(
-      `INSERT INTO USERS(id, name, email, password, "isAdmin", created_at, drive_license)
-        values('${id}', 'admin', 'admin@admin.com.br', '${password}', true, 'now()', 'XXXXXX')`
+      `INSERT INTO USERS(id, name, email, password, "isAdmin", created_at, drive_license )
+        values('${id}', 'admin', 'admin@rentx.com.br', '${password}', true, 'now()', 'XXXXXX')
+      `
     );
   });
 
@@ -25,9 +27,9 @@ describe("Create category controller", () => {
     await connection.close();
   });
 
-  it("sould be able to create a new category ", async () => {
+  it("should to be able to create a new category", async () => {
     const responseToken = await request(app).post("/sessions").send({
-      email: "admin@admin.com.br",
+      email: "admin@rentx.com.br",
       password: "admin",
     });
 
@@ -36,33 +38,37 @@ describe("Create category controller", () => {
     const response = await request(app)
       .post("/categories")
       .send({
-        name: "Test category",
-        description: "description test",
+        name: "Category Supertest",
+        description: "Category Supertest",
       })
-      .set({
-        Authorization: `Bearer ${refresh_token}`,
-      });
+      .set({ Authorization: `Bearer ${refresh_token}` });
 
-    expect(response.status).toBe(201);
+    expect(response.status).toEqual(201);
   });
 
-  it("sould not be able to create a new category if name exists", async () => {
+  it("should not to be able to create a new category with name exists", async () => {
     const responseToken = await request(app).post("/sessions").send({
-      email: "admin@admin.com.br",
+      email: "admin@rentx.com.br",
       password: "admin",
     });
 
     const { refresh_token } = responseToken.body;
 
+    await request(app)
+      .post("/categories")
+      .send({
+        name: "Category Supertest",
+        description: "Category Supertest",
+      })
+      .set({ Authorization: `Bearer ${refresh_token}` });
+
     const response = await request(app)
       .post("/categories")
       .send({
-        name: "Test category",
-        description: "description test",
+        name: "Category Supertest",
+        description: "Category Supertest",
       })
-      .set({
-        Authorization: `Bearer ${refresh_token}`,
-      });
+      .set({ Authorization: `Bearer ${refresh_token}` });
 
     expect(response.status).toBe(400);
   });

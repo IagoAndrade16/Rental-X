@@ -16,6 +16,9 @@ import "@shared/container/providers";
 import { IUsersTokensRepository } from "@modules/accounts/repositories/IUsersTokensRepository";
 import { UsersTokensRepository } from "@modules/accounts/infra/typeorm/repositories/UsersTokensRepository";
 
+import { LocalStorageProvider } from "./providers/StorageProvider/implementations/LocalStorageProvider";
+import { IStorageProvider } from "./providers/StorageProvider/IStorageProvider";
+
 container.registerSingleton<ICategoriesRepository>(
   "CategoriesRepository",
   CategoriesRepository
@@ -46,4 +49,9 @@ container.registerSingleton<ICarsRepository>("CarsRepository", CarsRepository);
 container.registerSingleton<IUsersTokensRepository>(
   "UsersTokensRepository",
   UsersTokensRepository
+);
+
+container.registerSingleton<IStorageProvider>(
+  "StorageProvider",
+  LocalStorageProvider
 );
